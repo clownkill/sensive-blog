@@ -28,7 +28,6 @@ def serialize_tag(tag):
 
 
 def index(request):
-
     most_popular_posts = sorted(
         Post.objects.all(),
         key=get_likes_count,
