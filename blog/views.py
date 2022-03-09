@@ -116,9 +116,10 @@ def tag_filter(request, tag_title):
     popular_tags = sorted(all_tags, key=get_related_posts_count)
     most_popular_tags = popular_tags[-5:]
 
-    most_popular_posts = Post.objects.annotate(Count('likes')).order_by('-likes__count').prefetch_related('author')[:5]
+    most_popular_posts = Post.objects.annotate(
+        Count('comments'), Count('likes')).order_by('-likes__count').prefetch_related('author')[:5]
 
-    related_posts = tag.posts.all()[:20]
+    related_posts = tag.posts.all().annotate(Count('comments'))[:20]
 
     context = {
         'tag': tag.title,
